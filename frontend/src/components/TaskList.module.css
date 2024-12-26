@@ -1,0 +1,13 @@
+.title {
+  font: var(--font-heading);
+}
+
+.outerDiv {
+  margin-top: 3rem;
+}
+
+.innerDiv {
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}
