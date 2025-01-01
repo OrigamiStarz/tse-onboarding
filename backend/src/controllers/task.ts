@@ -30,7 +30,7 @@ export const getTask: RequestHandler = async (req, res, next) => {
 
   try {
     // if the ID doesn't exist, then findById returns null
-    const task = await TaskModel.findById(id);
+    const task = await TaskModel.findById(id).populate("assignee");
 
     if (task === null) {
       throw createHttpError(404, "Task not found.");
@@ -49,7 +49,7 @@ export const getTask: RequestHandler = async (req, res, next) => {
 export const createTask: RequestHandler = async (req, res, next) => {
   // extract any errors that were found by the validator
   const errors = validationResult(req);
-  const { title, description, isChecked } = req.body;
+  const { title, description, isChecked, assignee } = req.body;
 
   try {
     // if there are errors, then this function throws an exception
@@ -60,11 +60,12 @@ export const createTask: RequestHandler = async (req, res, next) => {
       description: description,
       isChecked: isChecked,
       dateCreated: Date.now(),
+      assignee: assignee,
     });
 
     // 201 means a new resource has been created successfully
     // the newly created task is sent back to the user
-    res.status(201).json(task);
+    res.status(201).json(task.populate("assignee"));
   } catch (error) {
     next(error);
   }
@@ -84,7 +85,7 @@ export const removeTask: RequestHandler = async (req, res, next) => {
 
 export const updateTask: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
-  const { _id, title, description, isChecked, dateCreated } = req.body;
+  const { _id, title, description, isChecked, dateCreated, assignee } = req.body;
 
   try {
     validationErrorParser(errors);
@@ -96,10 +97,11 @@ export const updateTask: RequestHandler = async (req, res, next) => {
       description: description,
       isChecked: isChecked,
       dateCreated: dateCreated,
+      assignee: assignee,
     });
     if (result === null) res.status(404).json;
     const updatedTask = await TaskModel.findById(_id);
-    res.status(200).json(updatedTask);
+    res.status(200).json(updatedTask?.populate("assignee"));
   } catch (error) {
     next(error);
   }
