@@ -1,3 +1,13 @@
+.router {
+  text-decoration: inherit;
+  color: inherit;
+  width: 100%;
+}
+.router:hover {
+  text-decoration: underline;
+  color: inherit;
+}
+
 .item {
   height: 3rem;
   display: flex;
@@ -6,22 +16,32 @@
   align-items: center;
   column-gap: 0.25rem;
 }
+
+.item:hover {
+  background: var(--color-surface);
+}
+
 .textContainer {
   height: 100%;
   border-bottom: 1px solid var(--color-text-secondary);
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
 
-.textContainer span {
+.textContainer * {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.titleAndDesc {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -31,6 +51,13 @@
 .description {
   font: var(--font-body);
 }
+
 .checked {
   color: var(--color-text-secondary);
+}
+
+.userTag {
+  right: 0px;
+  width: 12rem;
+  margin-left: 1rem;
 }

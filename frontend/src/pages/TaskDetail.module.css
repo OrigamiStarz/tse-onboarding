@@ -1,0 +1,46 @@
+.title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  margin-right: 1rem;
+}
+
+.button {
+  margin-top: auto;
+  white-space: nowrap;
+}
+
+.titleDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.description {
+  margin-top: 2.5rem;
+}
+
+.details {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.details > p:first-child {
+  font-weight: bold;
+}
+
+.assignee {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1rem;
+}
+
+.profile {
+  width: 1rem;
+  height: 1rem;
+}
