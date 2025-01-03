@@ -135,9 +135,14 @@ describe("TaskForm", () => {
     fireEvent.click(saveButton);
     expect(updateTask).toHaveBeenCalledTimes(1);
     expect(updateTask).toHaveBeenCalledWith({
+      _id: "task123",
       title: "Updated title",
       description: "Updated description",
+      isChecked: false,
+      dateCreated: expect.any(Date),
+      assignee: "",
     });
+
     await waitFor(() => {
       // If the test ends before all state updates and rerenders occur, we'll
       // get a warning about updates not being wrapped in an `act(...)`
