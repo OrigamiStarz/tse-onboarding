@@ -14,7 +14,6 @@
 .titleDiv {
   display: flex;
   align-items: center;
-  justify-items: center;
   justify-content: space-between;
   margin-top: 1.5rem;
 }
@@ -27,6 +26,7 @@
   display: flex;
   gap: 1.5rem;
   margin-top: 1rem;
+  align-items: center;
 }
 
 .details > p:first-child {
@@ -36,4 +36,11 @@
 .assignee {
   overflow-x: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1rem;
+}
+
+.profile {
+  width: 1rem;
+  height: 1rem;
 }

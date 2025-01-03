@@ -1,11 +1,12 @@
 /**
  * Functions that process task route requests.
  */
-
+import mongoose from "mongoose";
 import { RequestHandler } from "express";
 import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
 import TaskModel from "src/models/task";
+import UserModel from "src/models/user";
 import validationErrorParser from "src/util/validationErrorParser";
 
 /**
@@ -55,12 +56,25 @@ export const createTask: RequestHandler = async (req, res, next) => {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
+    // Validate if assignee is a valid ObjectId
+    if (assignee && !mongoose.isValidObjectId(assignee)) {
+      throw createHttpError(400, "Invalid assignee ID.");
+    }
+
+    // Validate if assignee exists
+    if (assignee) {
+      const user = await UserModel.findById(assignee);
+      if (!user) {
+        throw createHttpError(400, "Assignee does not exist.");
+      }
+    }
+
     const task = await TaskModel.create({
       title: title,
       description: description,
       isChecked: isChecked,
       dateCreated: Date.now(),
-      assignee: assignee,
+      assignee: assignee !== "" ? assignee : null,
     });
 
     // 201 means a new resource has been created successfully
@@ -91,17 +105,31 @@ export const updateTask: RequestHandler = async (req, res, next) => {
     validationErrorParser(errors);
     // id validation
     if (_id != req.params.id) res.status(400);
+
+    // Validate if assignee is a valid ObjectId
+    if (assignee && !mongoose.isValidObjectId(assignee)) {
+      throw createHttpError(400, "Invalid assignee ID.");
+    }
+
+    // Validate if assignee exists
+    if (assignee) {
+      const user = await UserModel.findById(assignee);
+      if (!user) {
+        throw createHttpError(400, "Assignee does not exist.");
+      }
+    }
+
     // update task
     const result = await TaskModel.findByIdAndUpdate(_id, {
       title: title,
       description: description,
       isChecked: isChecked,
       dateCreated: dateCreated,
-      assignee: assignee,
-    });
+      assignee: assignee ? assignee : null,
+    }).populate("assignee");
     if (result === null) res.status(404).json;
     const updatedTask = await TaskModel.findById(_id);
-    res.status(200).json(updatedTask?.populate("assignee"));
+    res.status(200).json(updatedTask);
   } catch (error) {
     next(error);
   }
